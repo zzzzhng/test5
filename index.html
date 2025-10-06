@@ -26,7 +26,7 @@
       font-size: 13px; color: #000;
       z-index: 10;
     }
-    $1
+    .menu-left span, .menu-right span { margin: 0 6px; }
     .apple-icon { width: 16px; height: 16px; vertical-align: middle; margin-right: 6px; }
 /* 바탕화면 */
     .desktop {
@@ -66,6 +66,12 @@
     }
 
     .dock img:hover { transform: none; }
+      /* Dock items & 말풍선 */
+    .dock-item { position: relative; width: 64px; height: 64px; margin: 0 10px; display: flex; align-items: center; justify-content: center; }
+    .dock-item img { width: 64px; height: 64px; border-radius: 12px; display: block; object-fit: contain; }
+    .bubble { position: absolute; bottom: 78px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.95); color: #000; padding: 6px 10px; font-size: 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.12); box-shadow: 0 6px 16px rgba(0,0,0,0.18); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s ease; }
+    .bubble::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid rgba(255,255,255,0.95); filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.1)); }
+    .dock-item:hover .bubble { opacity: 1; }
   </style>
 </head>
 <body>
@@ -83,8 +89,8 @@
       <span>도움말</span>
     </div>
     <div class="menu-right">
-      <span>🔋100%</span>
-      <span>🕓 18:52</span>
+      <span>100%</span>
+      <span>11월 7일 (월) 1:30</span>
     </div>
   </div>
 
@@ -92,27 +98,27 @@
 
   <div class="dock">
     <div class="dock-item">
-      <img src="i1.png" alt="앱1">
+      <img src="icons/i1.png" alt="메시지">
       <div class="bubble">앱1</div>
     </div>
     <div class="dock-item">
-      <img src="i2.png" alt="앱2">
+      <img src="icons/i2.png" alt="Photo Booth">
       <div class="bubble">앱2</div>
     </div>
     <div class="dock-item">
-      <img src="i3.png" alt="앱3">
+      <img src="icons/i3.png" alt="음악">
       <div class="bubble">앱3</div>
     </div>
     <div class="dock-item">
-      <img src="i4.png" alt="앱4">
+      <img src="icons/i4.png" alt="FaceTime">
       <div class="bubble">앱4</div>
     </div>
     <div class="dock-item">
-      <img src="i5.png" alt="앱5">
+      <img src="icons/i5.png" alt="사진">
       <div class="bubble">앱5</div>
     </div>
     <div class="dock-item">
-      <img src="i6.png" alt="앱6">
+      <img src="icons/i6.png" alt="ChatGPT">
       <div class="bubble">앱6</div>
     </div>
   </div>
