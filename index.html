@@ -28,7 +28,8 @@
     }
     .menu-left span, .menu-right span { margin: 0 6px; }
     .apple-icon { width: 16px; height: 16px; vertical-align: middle; margin-right: 6px; }
-/* 바탕화면 */
+
+    /* 바탕화면 */
     .desktop {
       position: absolute;
       top: 28px;
@@ -57,20 +58,47 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
-    .dock img {
-      width: 64px; height: 64px;
-      margin: 0 10px;
-      transition: transform 0.2s;
-      cursor: pointer;
-      border-radius: 12px;
-    }
-
-    .dock img:hover { transform: none; }
-      /* Dock items & 말풍선 */
+    /* 아이콘 크기 통일 (보이는 박스 기준) */
     .dock-item { position: relative; width: 64px; height: 64px; margin: 0 10px; display: flex; align-items: center; justify-content: center; }
     .dock-item img { width: 64px; height: 64px; border-radius: 12px; display: block; object-fit: contain; }
-    .bubble { position: absolute; bottom: 78px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.95); color: #000; padding: 6px 10px; font-size: 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.12); box-shadow: 0 6px 16px rgba(0,0,0,0.18); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s ease; }
-    .bubble::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid rgba(255,255,255,0.95); filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.1)); }
+
+    /* 🔧 i5, i6만 시각 크기 보정 */
+    .dock-item img[src="icons/i5.png"],
+    .dock-item img[src="icons/i6.png"] {
+      transform: scale(1.18);
+      transform-origin: center center;
+    }
+
+    /* 말풍선 (불투명 40%) */
+    .bubble {
+      position: absolute;
+      bottom: 78px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.4); /* ← 투명도 40% */
+      color: #000;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.12);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .12s ease;
+    }
+    .bubble::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid rgba(255,255,255,0.4); /* ← 말풍선 꼬리도 동일 투명도 */
+      filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.1));
+    }
     .dock-item:hover .bubble { opacity: 1; }
   </style>
 </head>
@@ -90,7 +118,7 @@
     </div>
     <div class="menu-right">
       <span>100%</span>
-      <span>11월 7일 (월) 1:30</span>
+      <span>1월 30일 (월) 1:30</span>
     </div>
   </div>
 
@@ -98,28 +126,28 @@
 
   <div class="dock">
     <div class="dock-item">
-      <img src="icons/i1.png" alt="메시지">
-      <div class="bubble">앱1</div>
+      <img src="icons/i1.png" alt="앱1">
+      <div class="bubble">메시지</div>
     </div>
     <div class="dock-item">
-      <img src="icons/i2.png" alt="Photo Booth">
-      <div class="bubble">앱2</div>
+      <img src="icons/i2.png" alt="앱2">
+      <div class="bubble">Photo Booth</div>
     </div>
     <div class="dock-item">
-      <img src="icons/i3.png" alt="음악">
-      <div class="bubble">앱3</div>
+      <img src="icons/i3.png" alt="앱3">
+      <div class="bubble">음악</div>
     </div>
     <div class="dock-item">
-      <img src="icons/i4.png" alt="FaceTime">
-      <div class="bubble">앱4</div>
+      <img src="icons/i4.png" alt="앱4">
+      <div class="bubble">FaceTime</div>
     </div>
     <div class="dock-item">
-      <img src="icons/i5.png" alt="사진">
-      <div class="bubble">앱5</div>
+      <img src="icons/i5.png" alt="앱5">
+      <div class="bubble">사진</div>
     </div>
     <div class="dock-item">
-      <img src="icons/i6.png" alt="ChatGPT">
-      <div class="bubble">앱6</div>
+      <img src="icons/i6.png" alt="앱6">
+      <div class="bubble">ChatGPT</div>
     </div>
   </div>
 </body>
