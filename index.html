@@ -100,6 +100,69 @@
       filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.1));
     }
     .dock-item:hover .bubble { opacity: 1; }
+    /* ===== Photo Booth Modal ===== */
+  .photo-booth {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 600px;
+    background: #e4e4e4;
+    border-radius: 10px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    overflow: hidden;
+    display: none; /* 기본은 숨김 */
+    flex-direction: column;
+    z-index: 100;
+  }
+
+  .photo-booth.active { display: flex; }
+  
+  .pb-titlebar {
+    height: 28px;
+    background: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 10px;
+    border-bottom: 1px solid #d0d0d0;
+  }
+  .pb-traffic { display: flex; gap: 8px; margin-right: 10px; }
+  .pb-traffic .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f57; border: 1px solid #e0443e; }
+  .dot.yellow { background: #febc2e; border: 1px solid #d9a21c; }
+  .dot.green { background: #28c940; border: 1px solid #1dad2b; }
+  .pb-title { font-size: 14px; color: #333; font-weight: 500; }
+  
+  .photo-booth video {
+    flex: 1;
+    object-fit: cover;
+    background: #222;
+  }
+  
+  .pb-footer {
+    position: relative;
+    height: 80px;
+    background: rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #c8c8c8;
+  }
+  .pb-shutter {
+    width: 64px; height: 64px;
+    cursor: pointer;
+  }
+  .pb-left {
+    position: absolute;
+    left: 20px;
+    font-size: 24px;
+  }
+  .pb-right {
+    position: absolute;
+    right: 20px;
+    font-size: 16px;
+    color: #555;
+  }
   </style>
 </head>
 <body>
@@ -150,5 +213,24 @@
       <div class="bubble">ChatGPT</div>
     </div>
   </div>
+  <!-- Photo Booth 모달 -->
+<div id="photoBoothModal" class="photo-booth">
+  <div class="pb-titlebar">
+    <div class="pb-traffic">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+    </div>
+    <span class="pb-title">Photo Booth</span>
+  </div>
+
+  <video src="icons/1.MP4" autoplay loop muted></video>
+
+  <div class="pb-footer">
+    <img src="icons/i7.png" alt="촬영버튼" class="pb-shutter">
+    <div class="pb-left">📸</div>
+    <div class="pb-right">효과</div>
+  </div>
+</div>
 </body>
 </html>
