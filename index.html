@@ -232,5 +232,38 @@
     <div class="pb-right">효과</div>
   </div>
 </div>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const i2 = document.querySelector('.dock img[src="icons/i2.png"]');
+    const modal = document.getElementById('photoBoothModal');
+
+    if (i2 && modal) {
+      i2.style.cursor = 'pointer';
+      i2.addEventListener('click', () => {
+        modal.classList.add('active'); // 모달 열기
+        // 동영상 재시작(선택)
+        const v = modal.querySelector('video');
+        if (v) { v.currentTime = 0; v.play().catch(()=>{}); }
+      });
+    }
+
+    // 닫기: 빨간 점 클릭
+    const closeBtn = document.querySelector('.pb-traffic .dot.red');
+    if (closeBtn) {
+      closeBtn.style.cursor = 'pointer';
+      closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+    }
+
+    // 닫기: 모달 바깥 클릭
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // 닫기: ESC 키
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') modal.classList.remove('active');
+    });
+  });
+</script>
 </body>
 </html>
