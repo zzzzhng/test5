@@ -1,355 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>macOS Sonoma – Portfolio Desktop</title>
-  <meta name="description" content="A macOS Sonoma–style desktop UI for GitHub Pages. Icons in the Dock navigate to other pages." />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>macOS Desktop UI</title>
   <style>
-    /* ====== Base / Reset ====== */
-    :root {
-      --bar-h: 28px;
-      --dock-h: 92px;
-      --dock-radius: 24px;
-      --glass: rgba(255,255,255,.12);
-      --glass-strong: rgba(255,255,255,.22);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.7);
-      --link: #4da3ff;
-      --max-content: 1200px;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, Roboto, Helvetica, Arial, AppleColorEmoji, NotoColorEmoji, "SF Pro", sans-serif;
-      color: var(--text);
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    html, body {
+      height: 100%;
+      background-color: #d0d0d0; /* 회색 macOS 느낌 배경 */
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
       overflow: hidden;
-      background: #000;
     }
 
-    /* ====== Desktop Wallpaper (Sonoma-like) ====== */
+    /* 상단 메뉴바 */
+    .menu-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 28px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(20px);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 13px; color: #000;
+      z-index: 10;
+    }
+    .menu-left span, .menu-right span {margin: 0 6px;}
+
+    /* 바탕화면 */
     .desktop {
-      position: relative;
-      height: 100dvh;
-      width: 100vw;
-      background: radial-gradient(1200px 800px at 20% 20%, #0046ff55, transparent),
-                  radial-gradient(1000px 700px at 90% 10%, #ff2d5560, transparent),
-                  radial-gradient(900px 600px at 70% 90%, #00d2ff40, transparent),
-                  linear-gradient(160deg, #061226 0%, #090f23 30%, #0a1837 60%, #101a38 100%);
-      background-size: cover;
+      position: absolute;
+      top: 28px;
+      left: 0;
+      right: 0;
+      bottom: 90px;
+      background: #d0d0d0;
       background-position: center;
-      isolation: isolate;
+      background-size: cover;
     }
 
-    /* Optional: allow user to paste a wallpaper URL via data-wallpaper attribute */
-    .desktop[data-wallpaper] { background: center/cover no-repeat; }
-
-    /* ====== Menubar ====== */
-    .menubar {
-      position: absolute; inset: 0 0 auto 0; height: var(--bar-h);
-      display: grid; grid-template-columns: auto 1fr auto; align-items: center;
-      padding: 0 10px; gap: 10px; z-index: 20;
-      -webkit-backdrop-filter: saturate(150%) blur(12px);
-      backdrop-filter: saturate(150%) blur(12px);
-      background: linear-gradient(to bottom, rgba(8,12,26,.65), rgba(8,12,26,.35));
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .left, .center, .right { display: flex; align-items: center; gap: 12px; }
-    .apple { width: 14px; height: 14px; display: inline-flex; }
-    .menu a { color: var(--text); text-decoration: none; font-size: 12.5px; opacity: .95; }
-    .menu a:hover { opacity: 1; }
-    .title { font-weight: 600; font-size: 12.5px; opacity: .9; }
-    .status { font-variant-numeric: tabular-nums; font-size: 12.5px; color: var(--muted); }
-
-    /* ====== Desktop Icons Example (Optional) ====== */
-    .icons {
-      position: absolute; inset: var(--bar-h) 0 var(--dock-h) 0; z-index: 5;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-      align-content: start; gap: 24px; padding: 28px; max-width: var(--max-content);
-    }
-    .desktop-icon { width: 96px; text-align: center; color: var(--muted); text-decoration: none; }
-    .desktop-icon img, .desktop-icon svg { width: 64px; height: 64px; filter: drop-shadow(0 6px 18px rgba(0,0,0,.45)); }
-    .desktop-icon span { display: block; margin-top: 8px; font-size: 12px; }
-
-    /* ====== Dock ====== */
-    .dock-wrap {
-      position: absolute; inset: auto 0 14px 0; z-index: 30; display: flex; justify-content: center;
-      pointer-events: none; /* allow hover only on icons */
-    }
+    /* Dock */
     .dock {
-      pointer-events: auto;
-      height: var(--dock-h);
-      padding: 14px 16px;
-      display: flex; align-items: flex-end; gap: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
-      -webkit-backdrop-filter: blur(18px) saturate(160%);
-      backdrop-filter: blur(18px) saturate(160%);
-      border-radius: var(--dock-radius);
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,.22);
-      position: relative;
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 80px;
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(25px) saturate(150%);
+      border-radius: 22px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 10px 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
-    .dock::after {
-      content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), inset 0 0 24px rgba(255,255,255,.12);
+
+    .dock img {
+      width: 64px; height: 64px;
+      margin: 0 10px;
+      transition: transform 0.2s;
+      cursor: pointer;
+      border-radius: 12px;
     }
-    .dock-item { width: 64px; height: 64px; will-change: transform; transition: transform .12s ease;
-      display: grid; place-items: center; position: relative; cursor: pointer; }
-    .dock-item .badge { position: absolute; bottom: -6px; width: 6px; height: 6px; border-radius: 999px; background: #e8e8e8; opacity: .85; }
-    .dock-item a { display: grid; place-items: center; width: 100%; height: 100%; text-decoration: none; }
-    .dock-item svg, .dock-item img { width: 100%; height: 100%; border-radius: 14%; }
 
-    /* Label */
-    .label { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
-      background: rgba(20,24,42,.8); color: #fff; padding: 6px 10px; font-size: 12px; border-radius: 9px;
-      border: 1px solid rgba(255,255,255,.18); opacity: 0; pointer-events: none; transition: opacity .15s ease; white-space: nowrap; }
-    .dock-item:hover .label { opacity: 1; }
-
-    /* ====== Window stub (optional demo) ====== */
-    .win {
-      position: absolute; top: calc(var(--bar-h) + 40px); left: 60px; width: min(900px, 80vw); height: min(580px, 62vh);
-      background: rgba(255,255,255,.12);
-      -webkit-backdrop-filter: blur(20px) saturate(130%);
-      backdrop-filter: blur(20px) saturate(130%);
-      border-radius: 16px; border: 1px solid rgba(255,255,255,.22);
-      box-shadow: var(--shadow);
-      overflow: hidden; display: none;
-    }
-    .win .titlebar { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; background: linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.08)); border-bottom: 1px solid rgba(255,255,255,.18); }
-    .traffic { display: flex; gap: 8px; align-items: center; }
-    .dot { width: 12px; height: 12px; border-radius: 999px; }
-    .dot.red{ background:#ff5f57; border: 1px solid #e0443e; }
-    .dot.yellow{ background:#febc2e; border: 1px solid #d9a21c; }
-    .dot.green{ background:#28c940; border: 1px solid #1dad2b; }
-    .win .content { padding: 14px; color: #eef; font-size: 14px; }
-
-    /* ====== Responsive tweaks ====== */
-    @media (max-width: 720px) {
-      :root { --dock-h: 78px; }
-      .dock-item { width: 54px; height: 54px; }
-      .icons { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
-      .menu a, .title, .status { font-size: 12px; }
+    .dock img:hover {
+      transform: scale(1.3) translateY(-10px);
     }
   </style>
 </head>
 <body>
-  <div class="desktop" id="desktop">
-    <!-- ====== Menubar ====== -->
-    <div class="menubar" role="navigation" aria-label="menu bar">
-      <div class="left">
-        <span class="apple" aria-hidden="true"> 
-          <!-- Apple-like glyph (not the exact logo) -->
-          <svg viewBox="0 0 256 256" fill="currentColor" width="14" height="14" aria-hidden="true">
-            <path d="M170.3 127.7c-.2-28.4 23.2-42 24.3-42.7-13.3-19.4-34-22.1-41.2-22.4-17.5-1.8-34.1 10.3-42.9 10.3-8.8 0-22-10.1-36.1-9.8-18.6.3-35.7 10.8-45.1 27.4-19.2 33.3-4.9 82.6 13.7 109.6 9.1 12.9 20 27.3 34.2 26.8 13.6-.5 18.7-8.7 35.1-8.7 16.4 0 20.9 8.7 36.3 8.4 15.1-.3 24.7-13.1 33.9-26.1 10.7-15.7 15.1-31 15.3-31.8-.3-.1-29.4-11.3-29.5-41z"></path>
-            <path d="M140.6 44.5c7.8-9.5 13.1-22.7 11.7-35.8-11.3.5-25.1 7.8-33.3 17.2-7.3 8.4-13.7 21.9-12 34.8 12.6 1 25.6-6.4 33.6-16.2z"></path>
-          </svg>
-        </span>
-        <span class="title">Finder</span>
-        <nav class="menu" aria-label="app menu">
-          <a href="#">File</a>
-          <a href="#">Edit</a>
-          <a href="#">View</a>
-          <a href="#">Go</a>
-          <a href="#">Window</a>
-          <a href="#">Help</a>
-        </nav>
-      </div>
-      <div class="center"></div>
-      <div class="right">
-        <span class="status" id="status-wifi" aria-label="Wi‑Fi">Wi‑Fi</span>
-        <span class="status" id="status-battery" aria-label="Battery">100%</span>
-        <span class="status" id="status-time" aria-label="Time">00:00</span>
-      </div>
+  <div class="menu-bar">
+    <div class="menu-left">
+      <span>🍎</span>
+      <span>Chrome</span>
+      <span>파일</span>
+      <span>수정</span>
+      <span>보기</span>
+      <span>방문 기록</span>
+      <span>북마크</span>
+      <span>프로필</span>
+      <span>탭</span>
+      <span>도움말</span>
     </div>
-
-    <!-- ====== Optional desktop icons ====== -->
-    <div class="icons" aria-label="desktop icons">
-      <a class="desktop-icon" href="./about.html">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <rect x="3" y="3" width="18" height="18" rx="3" ry="3" stroke="white" />
-          <path d="M7 7h10M7 12h10M7 17h6" stroke="white" />
-        </svg>
-        <span>About Me</span>
-      </a>
+    <div class="menu-right">
+      <span>🔋100%</span>
+      <span>🕓 18:52</span>
     </div>
-
-    <!-- ====== Dock ====== -->
-    <div class="dock-wrap" aria-label="dock">
-      <div class="dock" id="dock">
-        <!-- Finder -->
-        <div class="dock-item" data-label="Finder">
-          <a href="./index.html" aria-label="Open Finder">
-            <!-- Finder icon (simple SVG approximation) -->
-            <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#8ec5ff"/>
-                  <stop offset="100%" stop-color="#3b82f6"/>
-                </linearGradient>
-              </defs>
-              <rect x="8" y="8" width="240" height="240" rx="44" fill="url(#g1)"/>
-              <path d="M128 48c-10 22-22 41-40 54 14 10 30 14 40 14s26-4 40-14c-18-13-30-32-40-54z" fill="#fff" opacity=".9"/>
-              <circle cx="94" cy="136" r="10" fill="#0b1324"/>
-              <circle cx="162" cy="136" r="10" fill="#0b1324"/>
-              <path d="M90 170c12 10 25 14 38 14s26-4 38-14" stroke="#0b1324" stroke-width="10" stroke-linecap="round" fill="none"/>
-            </svg>
-          </a>
-          <div class="label">Finder</div>
-          <div class="badge" aria-hidden="true"></div>
-        </div>
-
-        <!-- Safari -->
-        <div class="dock-item" data-label="Safari">
-          <a href="./apps/safari.html" aria-label="Open Safari">
-            <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="s1" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stop-color="#5ac8fa"/>
-                  <stop offset="100%" stop-color="#007aff"/>
-                </radialGradient>
-              </defs>
-              <circle cx="128" cy="128" r="116" fill="url(#s1)"/>
-              <circle cx="128" cy="128" r="100" fill="none" stroke="#fff" stroke-width="6" opacity=".9"/>
-              <polygon points="128,40 144,128 128,216 112,128" fill="white"/>
-              <polygon points="40,128 128,112 216,128 128,144" fill="white"/>
-            </svg>
-          </a>
-          <div class="label">Safari</div>
-          <div class="badge" aria-hidden="true"></div>
-        </div>
-
-        <!-- Mail -->
-        <div class="dock-item" data-label="Mail">
-          <a href="./apps/mail.html" aria-label="Open Mail">
-            <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <rect x="24" y="48" width="208" height="160" rx="24" fill="#60a5fa"/>
-              <path d="M40 64l88 72 88-72" stroke="#fff" stroke-width="12" fill="none"/>
-            </svg>
-          </a>
-          <div class="label">Mail</div>
-          <div class="badge" aria-hidden="true"></div>
-        </div>
-
-        <!-- Settings -->
-        <div class="dock-item" data-label="Settings">
-          <a href="./apps/settings.html" aria-label="Open Settings">
-            <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="128" cy="128" r="40" fill="#e5e7eb"/>
-              <g fill="#9ca3af">
-                <circle cx="128" cy="36" r="16"/>
-                <circle cx="220" cy="128" r="16"/>
-                <circle cx="128" cy="220" r="16"/>
-                <circle cx="36" cy="128" r="16"/>
-              </g>
-              <circle cx="128" cy="128" r="70" fill="none" stroke="#9ca3af" stroke-width="18"/>
-            </svg>
-          </a>
-          <div class="label">Settings</div>
-          <div class="badge" aria-hidden="true"></div>
-        </div>
-
-        <!-- Portfolio (custom app) -->
-        <div class="dock-item" data-label="Portfolio">
-          <a href="./portfolio/index.html" aria-label="Open Portfolio">
-            <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <rect x="36" y="60" width="184" height="140" rx="18" fill="#10b981"/>
-              <rect x="76" y="36" width="104" height="36" rx="12" fill="#34d399"/>
-            </svg>
-          </a>
-          <div class="label">Portfolio</div>
-          <div class="badge" aria-hidden="true"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ====== Optional demo window (shows if URL has ?demo) ====== -->
-    <section class="win" id="demoWin" role="dialog" aria-modal="false" aria-label="Demo Window">
-      <div class="titlebar">
-        <div class="traffic">
-          <span class="dot red" role="button" aria-label="Close"></span>
-          <span class="dot yellow" role="button" aria-label="Minimize"></span>
-          <span class="dot green" role="button" aria-label="Zoom"></span>
-        </div>
-        <strong class="title">Welcome</strong>
-        <div></div>
-      </div>
-      <div class="content">
-        <p>This is a demo window. For your GitHub Pages site, create pages at <code>/apps/safari.html</code>, <code>/apps/mail.html</code>, etc., and these Dock icons will navigate there.</p>
-        <p>You can also change the wallpaper by setting <code>data-wallpaper</code> on <code>.desktop</code> or by calling <code>setWallpaper(url)</code> from the console.</p>
-      </div>
-    </section>
   </div>
 
-  <script>
-    // ====== Clock & basic status ======
-    function updateClock(){
-      const el = document.getElementById('status-time');
-      const now = new Date();
-      const hh = now.getHours().toString().padStart(2,'0');
-      const mm = now.getMinutes().toString().padStart(2,'0');
-      el.textContent = `${hh}:${mm}`;
-    }
-    updateClock();
-    setInterval(updateClock, 30_000);
+  <div class="desktop"></div>
 
-    // ====== Dock magnification (basic proximity scaling) ======
-    const dock = document.getElementById('dock');
-    const items = Array.from(dock.querySelectorAll('.dock-item'));
+  <div class="dock">
+    <img src="icons/i1.png" alt="icon1">
+    <img src="icons/i2.png" alt="icon2">
+    <img src="icons/i3.png" alt="icon3">
+    <img src="icons/i4.png" alt="icon4">
+    <img src="icons/i5.png" alt="icon5">
+    <img src="icons/i6.png" alt="icon6">
+  </div>
 
-    function magnify(e) {
-      const rect = dock.getBoundingClientRect();
-      const mouseX = e.clientX;
-      const maxScale = 1.9;
-      const minScale = 1.0;
-      const influence = 120; // px radius of magnification
-      items.forEach(it => {
-        const r = it.getBoundingClientRect();
-        const cx = r.left + r.width/2;
-        const dist = Math.abs(mouseX - cx);
-        const t = Math.max(0, 1 - dist / influence);
-        const scale = minScale + (maxScale - minScale) * (t*t);
-        it.style.transform = `translateY(${-(scale-1)*14}px) scale(${scale})`;
-      });
-    }
-    function resetMag(){ items.forEach(it => it.style.transform = ''); }
-    dock.addEventListener('mousemove', magnify);
-    dock.addEventListener('mouseleave', resetMag);
-
-    // ====== Labels ======
-    items.forEach(it => {
-      const label = it.querySelector('.label');
-      it.addEventListener('mouseenter', ()=> label && (label.style.opacity = 1));
-      it.addEventListener('mouseleave', ()=> label && (label.style.opacity = 0));
-    });
-
-    // ====== Optional: demo window toggle via ?demo ======
-    const params = new URLSearchParams(location.search);
-    const demo = params.get('demo');
-    const win = document.getElementById('demoWin');
-    if (demo !== null && win) { win.style.display = 'block'; }
-
-    // ====== Wallpaper API ======
-    function setWallpaper(url){
-      const desk = document.getElementById('desktop');
-      if(!desk) return;
-      if(url){
-        desk.style.background = `url('${url}') center/cover no-repeat`;
-      }
-    }
-    window.setWallpaper = setWallpaper;
-
-    // ====== Accessibility: keyboard focus cue on Dock items ======
-    items.forEach(it => {
-      it.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' || e.key === ' ') {
-          const link = it.querySelector('a');
-          if(link){ link.click(); }
-        }
-      })
-    });
-  </script>
 </body>
 </html>
