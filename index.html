@@ -26,9 +26,9 @@
       font-size: 13px; color: #000;
       z-index: 10;
     }
-    .menu-left span, .menu-right span {margin: 0 6px;}
-
-    /* 바탕화면 */
+    $1
+    .apple-icon { width: 16px; height: 16px; vertical-align: middle; margin-right: 6px; }
+/* 바탕화면 */
     .desktop {
       position: absolute;
       top: 28px;
@@ -65,15 +65,13 @@
       border-radius: 12px;
     }
 
-    .dock img:hover {
-      transform: scale(1.3) translateY(-10px);
-    }
+    .dock img:hover { transform: none; }
   </style>
 </head>
 <body>
   <div class="menu-bar">
     <div class="menu-left">
-      <span>🍎</span>
+      <img src="icons/1.png" alt="Apple" class="apple-icon">
       <span>Chrome</span>
       <span>파일</span>
       <span>수정</span>
@@ -93,13 +91,30 @@
   <div class="desktop"></div>
 
   <div class="dock">
-    <img src="icons/i1.png" alt="icon1">
-    <img src="icons/i2.png" alt="icon2">
-    <img src="icons/i3.png" alt="icon3">
-    <img src="icons/i4.png" alt="icon4">
-    <img src="icons/i5.png" alt="icon5">
-    <img src="icons/i6.png" alt="icon6">
+    <div class="dock-item">
+      <img src="i1.png" alt="앱1">
+      <div class="bubble">앱1</div>
+    </div>
+    <div class="dock-item">
+      <img src="i2.png" alt="앱2">
+      <div class="bubble">앱2</div>
+    </div>
+    <div class="dock-item">
+      <img src="i3.png" alt="앱3">
+      <div class="bubble">앱3</div>
+    </div>
+    <div class="dock-item">
+      <img src="i4.png" alt="앱4">
+      <div class="bubble">앱4</div>
+    </div>
+    <div class="dock-item">
+      <img src="i5.png" alt="앱5">
+      <div class="bubble">앱5</div>
+    </div>
+    <div class="dock-item">
+      <img src="i6.png" alt="앱6">
+      <div class="bubble">앱6</div>
+    </div>
   </div>
-
 </body>
 </html>
