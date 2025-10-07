@@ -74,7 +74,6 @@
       transform-origin: center center;
     }
 
-
     /* 말풍선 (불투명 40%) */
     .bubble {
       position: absolute;
@@ -106,84 +105,126 @@
       filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.1));
     }
     .dock-item:hover .bubble { opacity: 1; }
-    /* ===== Photo Booth Modal ===== */
-  .photo-booth {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 800px; height: 600px;
-    background: #e4e4e4;
-    border-radius: 10px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    overflow: hidden;
-    display: none; /* 기본은 숨김 */
-    flex-direction: column;
-    z-index: 100;
-  }
-  .pb-title {
-    position: absolute;           /* ← 중앙 정렬용 */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px;
-    color: #333;
-    font-weight: 500;
-    pointer-events: none;         /* 클릭 막지 않도록 */
-  }
 
-  .photo-booth.active { display: flex; }
-  
-  .pb-titlebar {
-    position: relative;
-    height: 28px;
-    background: #f3f3f3;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 10px;
-    border-bottom: 1px solid #d0d0d0;
-  }
-  .pb-traffic { display: flex; gap: 8px; margin-right: 10px; }
-  .pb-traffic .dot { width: 12px; height: 12px; border-radius: 50%; }
-  .dot.red { background: #ff5f57; border: 1px solid #e0443e; }
-  .dot.yellow { background: #febc2e; border: 1px solid #d9a21c; }
-  .dot.green { background: #28c940; border: 1px solid #1dad2b; }
-  .pb-title { font-size: 14px; color: #333; font-weight: 500; }
-  
-  .photo-booth video {
-    flex: 1;
-    object-fit: cover;
-    background: #222;
-  }
-  
-  .pb-footer {
-    position: relative;
-    height: 80px;
-    background: rgba(255,255,255,0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top: 1px solid #c8c8c8;
-  }
-  .pb-shutter {
-    width: 64px; height: 64px;
-    cursor: pointer;
-  }
-  .pb-left {
-    position: absolute;
-    left: 20px;
-    font-size: 24px;
-  }
-  .pb-right {
-    position: absolute;
-    right: 20px;
-    font-size: 16px;
-    color: #555;
-    padding: 6px 10px;                           /* 내부 여백 */
-    border: 1px solid rgba(0,0,0,0.15);          /* 테두리 */
-    border-radius: 8px;                           /* 둥근 모서리 */
-    background: rgba(255,255,255,0.5);           /* 살짝 불투명 배경 */
-    backdrop-filter: blur(8px);                   /* 유리 느낌(선택) */
-  }
+    /* ===== Photo Booth Modal ===== */
+    .photo-booth {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 600px;
+      background: #e4e4e4;
+      border-radius: 10px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      overflow: hidden;
+      display: none; /* 기본은 숨김 */
+      flex-direction: column;
+      z-index: 100;
+    }
+    .pb-title {
+      position: absolute;           /* 중앙 정렬용 */
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+      pointer-events: none;         /* 클릭 막지 않도록 */
+    }
+
+    .photo-booth.active { display: flex; }
+    
+    .pb-titlebar {
+      position: relative;
+      height: 28px;
+      background: #f3f3f3;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 10px;
+      border-bottom: 1px solid #d0d0d0;
+
+      /* ▼ 드래그 UX 추가 (팝업 상단바 잡고 이동) */
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .pb-titlebar.dragging { cursor: grabbing; }
+
+    .pb-traffic { display: flex; gap: 8px; margin-right: 10px; }
+    .pb-traffic .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f57; border: 1px solid #e0443e; }
+    .dot.yellow { background: #febc2e; border: 1px solid #d9a21c; }
+    .dot.green { background: #28c940; border: 1px solid #1dad2b; }
+    .pb-title { font-size: 14px; color: #333; font-weight: 500; }
+    
+    .photo-booth video {
+      flex: 1;
+      object-fit: cover;
+      background: #222;
+    }
+    
+    .pb-footer {
+      position: relative;
+      height: 80px;
+      background: rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid #c8c8c8;
+    }
+    .pb-shutter { width: 64px; height: 64px; cursor: pointer; }
+    .pb-left { position: absolute; left: 20px; font-size: 24px; }
+    .pb-right {
+      position: absolute;
+      right: 20px;
+      font-size: 16px;
+      color: #555;
+      padding: 6px 10px;               /* 내부 여백 */
+      border: 1px solid rgba(0,0,0,0.15); /* 테두리 */
+      border-radius: 8px;                 /* 둥근 모서리 */
+      background: rgba(255,255,255,0.5);  /* 살짝 불투명 배경 */
+      backdrop-filter: blur(8px);         /* 유리 느낌 */
+    }
+
+    /* ===== Music modal (am.html을 iframe으로) ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      display: grid; place-items: center;
+      background: rgba(0,0,0,.18);
+      backdrop-filter: blur(2px);
+      z-index: 120;
+    }
+    .modal-overlay[hidden] { display: none !important; }
+
+    .modal-window {
+      width: min(1100px, 92vw);
+      height: min(700px, 86vh);
+      background: #eaeaea;
+      border-radius: 12px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+      overflow: hidden;
+      display: grid; grid-template-rows: 28px 1fr;
+    }
+
+    .mw-titlebar {
+      position: relative;
+      height: 28px;
+      background: #f3f3f3;
+      border-bottom: 1px solid #d0d0d0;
+      display: flex; align-items: center;
+      padding: 0 10px;
+
+      /* ▼ 드래그 UX 추가 */
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .mw-titlebar.dragging { cursor: grabbing; }
+    .mw-traffic { display: flex; gap: 8px; }
+    .mw-title {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      font-size: 14px; color: #333; font-weight: 500; pointer-events: none;
+    }
+    .modal-window iframe { width: 100%; height: 100%; border: 0; background: #fff; }
   </style>
 </head>
 <body>
@@ -236,57 +277,140 @@
       <div class="bubble">ChatGPT</div>
     </div>
   </div>
+
   <!-- Photo Booth 모달 -->
-<div id="photoBoothModal" class="photo-booth">
-  <div class="pb-titlebar">
-    <div class="pb-traffic">
-      <span class="dot red"></span>
-      <span class="dot yellow"></span>
-      <span class="dot green"></span>
+  <div id="photoBoothModal" class="photo-booth">
+    <div class="pb-titlebar">
+      <div class="pb-traffic">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <span class="pb-title">Photo Booth</span>
     </div>
-    <span class="pb-title">Photo Booth</span>
+
+    <video src="icons/1.MP4" autoplay loop muted></video>
+
+    <div class="pb-footer">
+      <img src="icons/i7.png" alt="촬영버튼" class="pb-shutter">
+      <div class="pb-left">📸</div>
+      <div class="pb-right">효과</div>
+    </div>
   </div>
 
-  <video src="icons/1.MP4" autoplay loop muted></video>
-
-  <div class="pb-footer">
-    <img src="icons/i7.png" alt="촬영버튼" class="pb-shutter">
-    <div class="pb-left">📸</div>
-    <div class="pb-right">효과</div>
+  <!-- Music 모달 (am.html을 iframe으로 로드) -->
+  <div id="musicModal" class="modal-overlay" hidden>
+    <div class="modal-window" id="musicWindow">
+      <div class="mw-titlebar">
+        <div class="mw-traffic">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+        <span class="mw-title">음악</span>
+      </div>
+      <iframe src="am.html" title="Apple Music UI" loading="lazy"></iframe>
+    </div>
   </div>
-</div>
+
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const i2 = document.querySelector('.dock img[src="icons/i2.png"]');
-    const modal = document.getElementById('photoBoothModal');
+    document.addEventListener('DOMContentLoaded', () => {
+      /* ===== Photo Booth 열기/닫기 ===== */
+      const i2 = document.querySelector('.dock img[src="icons/i2.png"]');
+      const pbModal = document.getElementById('photoBoothModal');
 
-    if (i2 && modal) {
-      i2.style.cursor = 'pointer';
-      i2.addEventListener('click', () => {
-        modal.classList.add('active'); // 모달 열기
-        // 동영상 재시작(선택)
-        const v = modal.querySelector('video');
-        if (v) { v.currentTime = 0; v.play().catch(()=>{}); }
+      if (i2 && pbModal) {
+        i2.style.cursor = 'pointer';
+        i2.addEventListener('click', () => {
+          pbModal.classList.add('active'); // 모달 열기
+          const v = pbModal.querySelector('video'); // 동영상 재시작(선택)
+          if (v) { v.currentTime = 0; v.play().catch(()=>{}); }
+        });
+      }
+      // 닫기: 빨간 점 / 바깥 클릭 / ESC
+      const pbCloseBtn = document.querySelector('.pb-traffic .dot.red');
+      if (pbCloseBtn) {
+        pbCloseBtn.style.cursor = 'pointer';
+        pbCloseBtn.addEventListener('click', () => pbModal.classList.remove('active'));
+      }
+      pbModal.addEventListener('click', (e) => {
+        if (e.target === pbModal) pbModal.classList.remove('active');
       });
-    }
 
-    // 닫기: 빨간 점 클릭
-    const closeBtn = document.querySelector('.pb-traffic .dot.red');
-    if (closeBtn) {
-      closeBtn.style.cursor = 'pointer';
-      closeBtn.addEventListener('click', () => modal.classList.remove('active'));
-    }
+      /* ===== Music(AM) 팝업: am.html을 모달로 띄우기 (독립페이지 링크도 유지) ===== */
+      const musicLink = document.querySelector('.dock-item a[href="am.html"]');
+      const musicModal = document.getElementById('musicModal');
+      const musicClose = musicModal.querySelector('.mw-titlebar .dot.red');
 
-    // 닫기: 모달 바깥 클릭
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.remove('active');
+      if (musicLink && musicModal) {
+        musicLink.addEventListener('click', (e) => {
+          // 일반 좌클릭만 모달로 전환. 새탭(⌘/Ctrl), 시프트 등은 원래처럼 독립페이지로 열리게 둠.
+          const plainLeftClick = (e.button === 0) && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+          if (plainLeftClick) {
+            e.preventDefault();
+            musicModal.hidden = false;
+          }
+        });
+      }
+      musicClose.addEventListener('click', () => musicModal.hidden = true);
+      musicModal.addEventListener('click', (e) => {
+        if (e.target === musicModal) musicModal.hidden = true;
+      });
+
+      // ESC로 둘 다 닫기
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          pbModal.classList.remove('active');
+          musicModal.hidden = true;
+        }
+      });
+
+      /* ===== 공통: 상단바 드래그 이동 (Photo Booth, Music) ===== */
+      function attachDrag(modalEl, titlebarEl) {
+        if (!modalEl || !titlebarEl) return;
+        let dragging = false, sx = 0, sy = 0, startLeft = 0, startTop = 0;
+
+        titlebarEl.addEventListener('mousedown', (e) => {
+          dragging = true;
+          titlebarEl.classList.add('dragging');
+          const rect = modalEl.getBoundingClientRect();
+
+          // transform으로 중앙 정렬된 상태라면, 현재 좌표로 픽셀 기준 전환
+          const style = getComputedStyle(modalEl);
+          if (style.transform !== 'none' || modalEl.style.transform) {
+            modalEl.style.left = rect.left + 'px';
+            modalEl.style.top  = rect.top  + 'px';
+            modalEl.style.transform = 'none';
+          }
+
+          sx = e.clientX; sy = e.clientY;
+          startLeft = rect.left; startTop = rect.top;
+          document.body.style.userSelect = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!dragging) return;
+          const dx = e.clientX - sx;
+          const dy = e.clientY - sy;
+          modalEl.style.left = (startLeft + dx) + 'px';
+          modalEl.style.top  = (startTop  + dy) + 'px';
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (!dragging) return;
+          dragging = false;
+          titlebarEl.classList.remove('dragging');
+          document.body.style.userSelect = '';
+        });
+      }
+
+      // Photo Booth 드래그 활성화
+      attachDrag(pbModal, pbModal.querySelector('.pb-titlebar'));
+
+      // Music(AM) 드래그 활성화 (modal-window 자체를 움직임)
+      const musicWindow = document.getElementById('musicWindow');
+      attachDrag(musicWindow, musicWindow.querySelector('.mw-titlebar'));
     });
-
-    // 닫기: ESC 키
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') modal.classList.remove('active');
-    });
-  });
-</script>
+  </script>
 </body>
 </html>
