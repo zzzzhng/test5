@@ -203,6 +203,45 @@
       `;
       host.appendChild(row);
     });
+    // === 앨범아트 자동 채우기 (iTunes Search API) ===
+    (async () => {
+      const rows = Array.from(document.querySelectorAll('.row'));
+  
+      async function fetchArtByTerm(term, entity) {
+        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=${entity}&limit=1`;
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const data = await res.json();
+        const item = data.results && data.results[0];
+        let art = item?.artworkUrl100 || item?.artworkUrl60;
+        // 더 선명한 사이즈로 업스케일
+        if (art) art = art.replace(/100x100bb|60x60bb/, '300x300bb');
+        return art || null;
+      }
+  
+      for (let i = 0; i < songs.length; i++) {
+        const s = songs[i];
+        const row = rows[i];
+        const thumb = row?.querySelector('.thumb');
+        if (!thumb) continue;
+  
+        let art = null;
+        // 1) 곡명+아티스트로 먼저 시도
+        try { art = await fetchArtByTerm(`${s.title} ${s.artist}`, 'musicTrack'); } catch(e){}
+        // 2) 실패 시 아티스트만으로 앨범 검색
+        if (!art) {
+          try { art = await fetchArtByTerm(s.artist, 'album'); } catch(e){}
+        }
+        // 3) 그래도 없으면 플레이스홀더
+        if (!art) {
+          art = `https://picsum.photos/seed/album${i}/56/56`;
+        }
+  
+        thumb.style.backgroundImage = `url("${art}")`;
+        thumb.style.backgroundSize = 'cover';
+        thumb.style.backgroundPosition = 'center';
+      }
+    })();
   </script>
 </body>
 </html>
