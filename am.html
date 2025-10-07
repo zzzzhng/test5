@@ -181,13 +181,26 @@
 
   <script>
     // 간단한 더미 데이터 생성
-    const songs = Array.from({length: 14}, (_,i)=>({
-      title: `노래${i+1}`,
-      artist: (['TWS','Hearts2Hearts','KATSEYE','NCT WISH','aespa'])[i%5],
-      album:  (['SUMMER BEAT!','STYLE','BEAUTIFUL CHAOS','COLOR','EP 모음'])[i%5],
-      time:   ['2:48','3:30','3:17','3:00','3:18','2:32','2:31','3:01','3:11','3:56','3:15','2:58','3:04','3:23'][i%14]
-    }));
-
+    const songs = [
+  { title: 'Yes or No', artist: '정국', album: 'GOLDEN', time: '2:28' },
+  { title: 'Run Run', artist: '이클립스', album: '선재 업고 튀어, Pt. 1 (Original Soundtrack)', time: '3:35' },
+  { title: 'Whatever U Want', artist: 'Hard Car Kids', album: 'Night Ride - EP', time: '3:16' },
+  { title: '마음대로', artist: 'Colde', album: '마음대로 - Single', time: '3:27' },
+  { title: 'Moves', artist: 'Squid the Kid', album: 'KOZY TAPE - EP', time: '2:48' },
+  { title: 'FREQUENCY (feat. Loco)', artist: 'Crush', album: 'FANG - EP', time: '3:32' },
+  { title: 'im n luv', artist: 'noevdv', album: 'im n luv - Single', time: '2:10' },
+  { title: 'ABCDLOVE', artist: '보이넥스트도어', album: 'WHY.. - EP', time: '2:38' },
+  { title: 'luther', artist: 'Kendrick Lamar & SZA', album: 'GNX', time: '2:58' },
+  { title: 'My Turn', artist: 'SZA', album: 'SOS Deluxe: LANA', time: '2:57' },
+  { title: '몰랐어', artist: '엔하이픈', album: 'DIMENSION : DILEMMA', time: '2:48' },
+  { title: '2 Much', artist: 'Justin Bieber', album: 'Justice', time: '2:33' },
+  { title: 'Company', artist: 'Justin Bieber', album: 'Purpose (Deluxe)', time: '3:28' },
+  { title: 'So Sick', artist: 'Ne-Yo', album: 'In My Own Words', time: '3:27' },
+  { title: 'Right My Wrongs', artist: 'Bryson Tiller', album: 'TRAPSOUL', time: '4:09' },
+  { title: '하루 끝', artist: '아이유', album: '스무 살의 봄 - Single', time: '4:02' },
+  { title: '사탕', artist: '세븐틴', album: 'SEVENTEEN 12th Mini Album \'SPILL THE FEELS\' - EP', time: '3:04' },
+  { title: 'RPG (feat. 6LACK)', artist: 'Kehlani', album: 'While We Wait', time: '3:56' },
+];
     const host = document.getElementById('rows');
     songs.forEach((s,idx)=>{
       const row = document.createElement('div');
