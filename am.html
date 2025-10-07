@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Music — 무제 플레이리스트</title>
+  <style>
+    :root{
+      --bg:#f6f7f8;
+      --panel:#ffffff;
+      --side:#e8efec;
+      --line:#e4e6ea;
+      --text:#0b0f14;
+      --muted:#6b7280;
+      --red:#e24343;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg); color:var(--text);
+    }
+    .app{
+      display:grid; grid-template-columns: 260px 1fr; height:100vh; overflow:hidden;
+    }
+    /* Sidebar */
+    .side{
+      background:linear-gradient(#eef4f2,#e7efed);
+      border-right:1px solid var(--line);
+      padding:14px 12px;
+      overflow:auto;
+    }
+    .search{
+      display:flex; align-items:center; gap:8px; padding:8px 10px; background:#fff; border:1px solid var(--line); border-radius:10px;
+      box-shadow: var(--shadow);
+      margin-bottom:14px;
+    }
+    .side h4{margin:16px 8px 8px; font-size:12px; color:#7b8592; text-transform:uppercase; letter-spacing:.04em}
+    .nav a{
+      display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:10px; color:#1e293b; text-decoration:none;
+    }
+    .nav a.active{ background:#dfe9e5; }
+    .nav a:hover{ background:#e9f1ee; }
+    .dot{ width:8px; height:8px; border-radius:50%; background:#a3b0b8; }
+
+    /* Main */
+    .main{ display:grid; grid-template-rows: 56px auto; overflow:hidden; }
+    /* Toolbar */
+    .toolbar{
+      display:flex; align-items:center; gap:14px; padding:8px 16px; border-bottom:1px solid var(--line); background:#fbfbfb;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:28px; height:28px; border-radius:50%;
+      background:#fff; border:1px solid var(--line); box-shadow:0 2px 4px rgba(0,0,0,.04);
+      cursor:pointer; user-select:none;
+    }
+    .btn:active{ transform:translateY(1px) }
+    .miniplayer{
+      margin-left:auto; display:flex; align-items:center; gap:10px; color:var(--muted);
+      font-size:12px;
+    }
+    .progress{ width:180px; height:4px; background:#e5e7eb; border-radius:999px; position:relative; }
+    .progress::after{ content:""; position:absolute; left:0; top:0; height:100%; width:35%; background:#d1d5db; border-radius:inherit; }
+
+    /* Content header */
+    .content{ overflow:auto; }
+    .header{
+      display:grid; grid-template-columns: 280px 1fr; gap:24px; padding:28px 28px 12px;
+    }
+    .art{
+      aspect-ratio:1/1; border-radius:14px; overflow:hidden; box-shadow:var(--shadow); background:#ddd;
+      display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+    }
+    .tile{ background:linear-gradient(135deg,#ffd978,#ff7ab5); }
+    .tile:nth-child(2){ background:linear-gradient(135deg,#9be7ff,#5a9bff); }
+    .tile:nth-child(3){ background:linear-gradient(135deg,#b1ff9b,#33d17a); }
+    .tile:nth-child(4){ background:linear-gradient(135deg,#c7b6ff,#7a5aff); }
+
+    .meta h1{ margin:0 0 8px; font-size:28px; }
+    .meta .sub{ color:var(--muted); font-size:14px; margin-bottom:16px; }
+    .controls{ display:flex; gap:10px; }
+    .play{ background:var(--red); color:#fff; padding:10px 18px; border:none; border-radius:10px; font-weight:600; cursor:pointer; }
+    .shuffle{ background:#fff; color:#c53030; border:1px solid #f1c1c1; padding:10px 18px; border-radius:10px; cursor:pointer; }
+
+    /* Table/list */
+    .list{
+      padding:12px 28px 28px;
+    }
+    .thead, .row{
+      display:grid; grid-template-columns: 1fr 220px 1fr 80px; gap:14px; align-items:center;
+      border-bottom:1px solid var(--line);
+      padding:10px 8px;
+    }
+    .thead{ color:#7b8592; font-size:12px; position:sticky; top:0; background:#fff; z-index:5; }
+    .row{ background:#fff; }
+    .row:hover{ background:#f9fafb; }
+    .num{ color:#94a3b8; width:28px }
+    .time{ color:#64748b; text-align:right; font-variant-numeric: tabular-nums; }
+    .title{ display:flex; align-items:center; gap:10px; }
+    .thumb{ width:28px; height:28px; border-radius:6px; background:#e5e7eb; }
+
+    @media(max-width: 1000px){
+      .app{ grid-template-columns: 220px 1fr; }
+      .header{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="side">
+      <div class="search">🔎 <span style="color:#9aa3ad">검색</span></div>
+
+      <h4>Apple Music</h4>
+      <nav class="nav">
+        <a href="#"><span class="dot"></span> 지금 듣기</a>
+        <a href="#"><span class="dot"></span> 탐색하기</a>
+        <a href="#"><span class="dot"></span> 라디오</a>
+      </nav>
+
+      <h4>보관함</h4>
+      <nav class="nav">
+        <a href="#"><span class="dot"></span> 최근 추가한 항목</a>
+        <a href="#"><span class="dot"></span> 아티스트</a>
+        <a href="#"><span class="dot"></span> 앨범</a>
+        <a href="#" class="active"><span class="dot"></span> 무제 플레이리스트</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="btn">⟨</div>
+        <div class="btn">⟩</div>
+        <div class="btn">▶</div>
+        <div class="btn">⏸︎</div>
+
+        <div class="miniplayer">
+          <span style="max-width:360px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            Soda Pop — K-Pop Demon Hunters
+          </span>
+          <div class="progress"></div>
+          <span>🔊</span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <section class="header">
+          <div class="art">
+            <div class="tile"></div><div class="tile"></div>
+            <div class="tile"></div><div class="tile"></div>
+          </div>
+          <div class="meta">
+            <h1>무제 플레이리스트</h1>
+            <div class="sub">오늘 업데이트됨</div>
+            <div class="controls">
+              <button class="play">▶ 재생</button>
+              <button class="shuffle">🔀 섞어 재생</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="list">
+          <div class="thead">
+            <div>노래</div>
+            <div>아티스트</div>
+            <div>앨범</div>
+            <div class="time">시간</div>
+          </div>
+
+          <!-- 샘플 데이터 -->
+          <div id="rows"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // 간단한 더미 데이터 생성
+    const songs = Array.from({length: 14}, (_,i)=>({
+      title: `노래${i+1}`,
+      artist: (['투어스','Hearts2Hearts','KATSEYE','NCT WISH','aespa'])[i%5],
+      album:  (['SUMMER BEAT!','STYLE','BEAUTIFUL CHAOS','COLOR','EP 모음'])[i%5],
+      time:   ['2:48','3:30','3:17','3:00','3:18','2:32','2:31','3:01','3:11','3:56','3:15','2:58','3:04','3:23'][i%14]
+    }));
+
+    const host = document.getElementById('rows');
+    songs.forEach((s,idx)=>{
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `
+        <div class="title">
+          <div class="thumb"></div>
+          <div>${idx+1}. ${s.title}</div>
+        </div>
+        <div>${s.artist}</div>
+        <div>${s.album}</div>
+        <div class="time">${s.time}</div>
+      `;
+      host.appendChild(row);
+    });
+  </script>
+</body>
+</html>
