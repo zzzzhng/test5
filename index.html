@@ -203,6 +203,9 @@
       box-shadow: 0 30px 80px rgba(0,0,0,.45);
       overflow: hidden;
       display: grid; grid-template-rows: 28px 1fr;
+      position: fixed;              /* ← 추가 */
+      left: 50%; top: 50%;          /* ← 추가 */
+      transform: translate(-50%,-50%); /* ← 추가 (처음엔 가운데) */
     }
 
     .mw-titlebar {
@@ -225,6 +228,20 @@
       font-size: 14px; color: #333; font-weight: 500; pointer-events: none;
     }
     .modal-window iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+    
+    /* === Music 모달의 트래픽 버튼(좌상단) 사이즈/스타일만 오버라이드 === */
+    .mw-traffic .dot { 
+      width: 14px;   /* 더 크게 */
+      height: 14px;
+      border-radius: 50%;
+    }
+    
+    .mw-traffic .dot.red   { background:#ff5f57; border:1px solid #e0443e; box-shadow: inset 0 -1px 0 rgba(0,0,0,.12); }
+    .mw-traffic .dot.yellow{ background:#febc2e; border:1px solid #d9a21c; box-shadow: inset 0 -1px 0 rgba(0,0,0,.12); }
+    .mw-traffic .dot.green { background:#28c940; border:1px solid #1dad2b; box-shadow: inset 0 -1px 0 rgba(0,0,0,.12); }
+    
+    /* 살짝 여백/정렬 보정(선택) */
+    .mw-traffic { gap: 10px; align-items: center; }
   </style>
 </head>
 <body>
@@ -366,43 +383,50 @@
       });
 
       /* ===== 공통: 상단바 드래그 이동 (Photo Booth, Music) ===== */
-      function attachDrag(modalEl, titlebarEl) {
-        if (!modalEl || !titlebarEl) return;
-        let dragging = false, sx = 0, sy = 0, startLeft = 0, startTop = 0;
-
-        titlebarEl.addEventListener('mousedown', (e) => {
-          dragging = true;
-          titlebarEl.classList.add('dragging');
-          const rect = modalEl.getBoundingClientRect();
-
-          // transform으로 중앙 정렬된 상태라면, 현재 좌표로 픽셀 기준 전환
-          const style = getComputedStyle(modalEl);
-          if (style.transform !== 'none' || modalEl.style.transform) {
-            modalEl.style.left = rect.left + 'px';
-            modalEl.style.top  = rect.top  + 'px';
-            modalEl.style.transform = 'none';
-          }
-
-          sx = e.clientX; sy = e.clientY;
-          startLeft = rect.left; startTop = rect.top;
-          document.body.style.userSelect = 'none';
-        });
-
-        window.addEventListener('mousemove', (e) => {
-          if (!dragging) return;
-          const dx = e.clientX - sx;
-          const dy = e.clientY - sy;
-          modalEl.style.left = (startLeft + dx) + 'px';
-          modalEl.style.top  = (startTop  + dy) + 'px';
-        });
-
-        window.addEventListener('mouseup', () => {
-          if (!dragging) return;
-          dragging = false;
-          titlebarEl.classList.remove('dragging');
-          document.body.style.userSelect = '';
-        });
-      }
+     function attachDrag(modalEl, titlebarEl) {
+      if (!modalEl || !titlebarEl) return;
+    
+      let dragging = false, sx = 0, sy = 0, startLeft = 0, startTop = 0;
+    
+      titlebarEl.addEventListener('mousedown', (e) => {
+        e.preventDefault(); // 텍스트 선택/스크롤 방지
+        dragging = true;
+        titlebarEl.classList.add('dragging');
+    
+        // 현재 위치를 픽셀 기준으로 고정
+        const rect = modalEl.getBoundingClientRect();
+        const cs = getComputedStyle(modalEl);
+    
+        // 어떤 경우든 드래그 대상으로는 fixed가 안정적
+        modalEl.style.position = 'fixed';
+    
+        // transform 중심정렬 되어있다면, 실제 화면 좌표로 치환
+        if (cs.transform !== 'none' || modalEl.style.transform) {
+          modalEl.style.left = rect.left + 'px';
+          modalEl.style.top  = rect.top  + 'px';
+          modalEl.style.transform = 'none';
+        }
+    
+        sx = e.clientX; sy = e.clientY;
+        startLeft = rect.left; startTop = rect.top;
+        document.body.style.userSelect = 'none';
+      });
+    
+      window.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - sx;
+        const dy = e.clientY - sy;
+        modalEl.style.left = (startLeft + dx) + 'px';
+        modalEl.style.top  = (startTop  + dy) + 'px';
+      });
+    
+      window.addEventListener('mouseup', () => {
+        if (!dragging) return;
+        dragging = false;
+        titlebarEl.classList.remove('dragging');
+        document.body.style.userSelect = '';
+      });
+    }
 
       // Photo Booth 드래그 활성화
       attachDrag(pbModal, pbModal.querySelector('.pb-titlebar'));
