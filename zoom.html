@@ -3,20 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <title>Zoom Icon Screen</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ===== CSS 시작 ===== */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      /* 줌 기준 좌표 기본값 */
+      --zoomX: 50vw;
+      --zoomY: 50vh;
+    }
+
+    /* 전체 화면 레이어 (이게 통째로 확대됨) */
+    .scene {
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(
+        circle at top,
+        #262b3a 0%,
+        #050510 55%,
+        #000 100%
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transform: scale(1);
+      transform-origin: var(--zoomX) var(--zoomY);
+      transition: transform 0.25s ease-out;
+    }
+
+    /* 확대 상태 */
+    body.zoomed .scene {
+      transform: scale(1.6); /* 확대 배율 */
+    }
+
+    /* 아이콘 정렬 */
+    .icon-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 40px;
+      padding: 40px;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .icon {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+      border-radius: 28px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .icon-label {
+      position: absolute;
+      bottom: -26px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 13px;
+      color: #f5f5f5;
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+      pointer-events: none;
+    }
+
+    .icon::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .icon-wrapper {
+        gap: 24px;
+        padding: 24px;
+      }
+
+      .icon {
+        width: 90px;
+        height: 90px;
+      }
+
+      body.zoomed .scene {
+        transform: scale(1.3);
+      }
+    }
+
+    /* ===== CSS 끝 ===== */
+  </style>
 </head>
 <body>
-  <!-- 전체 화면 레이어 -->
+  <!-- ===== HTML 시작 ===== -->
   <div class="scene">
     <div class="icon-wrapper">
-      <a href="#" class="icon">
+      <!-- 아이콘들: src / 라벨 / 링크 네가 원하는 걸로 수정하면 됨 -->
+
+      <a href="am.html" class="icon">
         <img src="icons/i1.png" alt="Project 1" />
-        <span class="icon-label">Project 1</span>
+        <span class="icon-label">About Me</span>
       </a>
 
-      <a href="#" class="icon">
+      <a href="pb.html" class="icon">
         <img src="icons/i2.png" alt="Project 2" />
-        <span class="icon-label">Project 2</span>
+        <span class="icon-label">Photo Booth</span>
       </a>
 
       <a href="#" class="icon">
@@ -29,10 +147,36 @@
         <span class="icon-label">Project 4</span>
       </a>
 
-      <!-- 아이콘 더 추가하고 싶으면 a.icon 복붙 -->
+      <!-- 필요하면 위 a.icon 블록 복붙해서 더 추가 -->
     </div>
   </div>
+  <!-- ===== HTML 끝 ===== -->
 
-  <script src="script.js"></script>
+  <script>
+    // ===== JS 시작 =====
+
+    const icons = document.querySelectorAll(".icon");
+
+    icons.forEach((icon) => {
+      icon.addEventListener("mouseenter", () => {
+        const rect = icon.getBoundingClientRect();
+
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        // body의 CSS 변수로 줌 기준 좌표 설정
+        document.body.style.setProperty("--zoomX", `${centerX}px`);
+        document.body.style.setProperty("--zoomY", `${centerY}px`);
+
+        document.body.classList.add("zoomed");
+      });
+
+      icon.addEventListener("mouseleave", () => {
+        document.body.classList.remove("zoomed");
+      });
+    });
+
+    // ===== JS 끝 =====
+  </script>
 </body>
 </html>
